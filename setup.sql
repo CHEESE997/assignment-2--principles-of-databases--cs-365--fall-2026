@@ -1,11 +1,14 @@
+-- Deletes the database if it already exists and creates a new passwords database
 DROP DATABASE IF EXISTS passwords;
 CREATE DATABASE passwords;
 USE passwords;
 
+-- Sets up the AES encryption mode, creates the key and initialization vector; used for both encryption and decryption
 SET block_encryption_mode = 'aes-256-cbc';
 SET @key_str = UNHEX(SHA2('123Blue321', 512));
 SET @init_vector = RANDOM_BYTES(16);
 
+-- Creates the website table
 CREATE TABLE IF NOT EXISTS website (
     websiteID INT AUTO_INCREMENT,
     websiteName VARCHAR(150) NOT NULL,
@@ -14,6 +17,7 @@ CREATE TABLE IF NOT EXISTS website (
     PRIMARY KEY (websiteID)
 );
 
+-- Creates the user table
 CREATE TABLE IF NOT EXISTS user (
     userID INT AUTO_INCREMENT,
     firstName VARCHAR(100) NOT NULL,
@@ -24,6 +28,7 @@ CREATE TABLE IF NOT EXISTS user (
     PRIMARY KEY (userID)
 );
 
+-- Creates the login table that connects users to websites; uses foreign keys userID and websiteID that establish the relationship
 CREATE TABLE IF NOT EXISTS login (
     loginID INT AUTO_INCREMENT,
     userID INT NOT NULL,
@@ -37,6 +42,7 @@ CREATE TABLE IF NOT EXISTS login (
     PRIMARY KEY (loginID)
 );
 
+-- Adds the 10 websites used for the initial password entries
 INSERT INTO website (websiteName, websiteURL)
 VALUES
     ('Instagram', 'https://www.instagram.com/login'),
@@ -50,6 +56,7 @@ VALUES
     ('Pinterest', 'https://www.pinterest.com/login/'),
     ('Valorant', 'https://auth.riotgames.com/');
 
+-- Adds the 10 users connected with the initial login entries
 INSERT INTO user (firstName, lastName, username, email)
 VALUES 
     ('Cameron', 'Brown', 'CamDaBomb', 'CamBrown@gmail.com'),
@@ -63,6 +70,8 @@ VALUES
     ('Chloe', 'Harris', 'ChloePinz', 'ChloeHarris@gmail.com'),
     ('Mason', 'Clark', 'Mason2DaRescue', 'MasonClark@icloud.com');
 
+-- Adds the 10 login entries and encrypts each password using AES Encryption
+-- Each login is connected to a user and website through their IDs
 INSERT INTO login (userID, websiteID, password, comment, timestamp)
 VALUES
     (1, 1, AES_ENCRYPT('Th3Cloudzfir3', @key_str, @init_vector), 'New Insta account.', '2024-02-12 17:24:18'),
@@ -71,7 +80,7 @@ VALUES
     (4, 4, AES_ENCRYPT('Sunset7Cloud!', @key_str, @init_vector), 'Microsoft account for school.', '2023-08-19 14:32:10'),
     (5, 5, AES_ENCRYPT('PurpleMoon!7', @key_str, @init_vector), 'Discord gaming account.', '2016-05-08 20:16:35'),
     (6, 6, AES_ENCRYPT('Video5tars!', @key_str, @init_vector), 'Youtube account for videos.', '2020-09-14 12:45:30'),
-    (7, 7, AES_ENCRYPT('Hope4River9!', @key_str, @init_vector), 'Amazon shopping acccount.', '2019-12-03 09:21:15'),
+    (7, 7, AES_ENCRYPT('Hope4River9!', @key_str, @init_vector), 'Amazon shopping account.', '2019-12-03 09:21:15'),
     (8, 8, AES_ENCRYPT('Gamez4Life001!', @key_str, @init_vector), 'Steam gaming account.', '2025-06-25 18:37:50'),
     (9, 9, AES_ENCRYPT('Pinning4Flowerz67!', @key_str, @init_vector), 'Pinterest account for ideas.', '2018-04-11 16:08:22'),
     (10,10, AES_ENCRYPT('Agents401Fire', @key_str, @init_vector), 'Riot Valorant gaming account.', '2021-01-27 21:42:36');
