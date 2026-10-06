@@ -1,3 +1,6 @@
+SET block_encryption_mode = 'aes-256-cbc';
+SET @key_str = UNHEX(SHA2('123Blue321', 512));
+
 -- Creates a new entry into the database
 INSERT INTO website(websiteName, websiteURL)
 VALUES (
@@ -17,7 +20,7 @@ INSERT INTO login(websiteID, userID, password, comment, timestamp)
 VALUES (
     11,
     11,
-    AES_ENCRYPT('JustAnotherDiamondz', '123Blue321'),
+    AES_ENCRYPT('JustAnotherDiamondz', @key_str, @init_vector),
     'Quizlet account for studying.',
     '2026-05-25 04:37:08'
 );
@@ -31,7 +34,7 @@ WHERE website.websiteURL = 'https://discord.com/login';
 
 -- Gets all password-related data including the decrypted password
 SELECT login.*,
-    CAST(AES_DECRYPT(login.password, '123Blue321') AS CHAR) AS decryptedPassword
+    CAST(AES_DECRYPT(login.password, @key_str, @init_vector) AS CHAR) AS decryptedPassword
 FROM login
 JOIN website
 ON login.websiteID = website.websiteID
@@ -46,7 +49,7 @@ WHERE websiteURL = 'https://www.twitter.com/login';
 
 -- Change the password to any entry
 UPDATE login
-SET password = AES_ENCRYPT('Puupies4Lifers', '123Blue321')
+SET password = AES_ENCRYPT('Puupies4Lifers', @key_str, @init_vector)
 WHERE websiteID = 6;
 
 -- Remove a tuple based on a URL
@@ -58,4 +61,4 @@ WHERE website.websiteURL = 'https://www.pinterest.com/login/';
 
 -- Remove a tuple based on a password
 DELETE FROM login
-WHERE password = AES_ENCRYPT('Sunset7Cloud!', '123Blue321');
+WHERE password = AES_ENCRYPT('Sunset7Cloud!', @key_str, @init_vector);
