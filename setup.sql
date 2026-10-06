@@ -16,8 +16,8 @@ CREATE TABLE IF NOT EXISTS user (
     email VARCHAR(256) NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS password (
-    passwordID INT AUTO_INCREMENT PRIMARY KEY,
+CREATE TABLE IF NOT EXISTS login (
+    loginID INT AUTO_INCREMENT PRIMARY KEY,
     userID INT NOT NULL,
     websiteID INT NOT NULL,
     password VARBINARY(512) NOT NULL,
@@ -53,7 +53,7 @@ VALUES
     ('Chloe', 'Harris', 'ChloePinz', 'ChloeHarris@gmail.com'),
     ('Mason', 'Clark', 'Mason2DaRescue', 'MasonClark@icloud.com');
 
-INSERT INTO password (userID, websiteID, password, comment, timestamp)
+INSERT INTO login (userID, websiteID, password, comment, timestamp)
 VALUES
     (1, 1, AES_ENCRYPT('Th3Cloudzfir3', '123Blue321'), 'New Insta account.', '2024-02-12 17:24:18'),
     (2, 2, AES_ENCRYPT('Life1sg00d', '123Blue321'), 'Twitter account for art.', '2017-07-17 19:07:00'),
