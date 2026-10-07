@@ -27,7 +27,7 @@ CREATE TABLE passwords (
 INSERT INTO users 
   (first_name, last_name, username, email)
 VALUES 
-  ('Alex', 'Jones', 'alexj', 'alex.jones@example.com');
+  ('Alex', 'Jones', 'alexj', 'alex.jones@example.com'),
   ('Charlie', 'Kirk', 'CK', 'C.K@email.com');
 
 INSERT INTO passwords
