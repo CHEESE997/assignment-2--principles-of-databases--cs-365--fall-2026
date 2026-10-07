@@ -26,7 +26,7 @@ VALUES (
 );
 
 -- Gets the password associated with a URL
-SELECT password 
+SELECT login.password 
 FROM login
 JOIN website
 ON login.websiteID = website.websiteID
